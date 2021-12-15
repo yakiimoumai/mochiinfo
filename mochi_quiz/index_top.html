@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>もちクイズ</title>
+<link rel="stylesheet" href="css/mochi.css">
+<link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
+<link href="https://fonts.googleapis.com/earlyaccess/nikukyu.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/earlyaccess/nicomoji.css" rel="stylesheet">
+<script src="jquery.min.js"></script>
+
+
+</head>
+<body>
+  <div id="headline_contents">
+    <h1 class="wf-nicomoji">もちクイズ</h1>
+    <p class="f_blue">知りたいもちをタップしよう</p>
+  </div>
+
+<script src="mochi_jsonp.js"></script>
+<script>
+var test = mo.mochi[1].mochi_img;
+console.log("test",test);
+console.log("length",mo.mochi.length);
+var test_name = mo.mochi[1].name;
+var connectName=[];
+arrayCnt = mo.mochi.length;
+var beforeExists = false;
+var id;
+var name;
+var mochi_img;
+var before_name;
+var isUserExists = false;
+
+////これで出来たらいいのだが
+console.log("arrayCnt",arrayCnt);
+var connectUser = [];
+
+//function add( id, name ,img ) {
+  for(var i=0;i<mo.mochi.length;++i){/* for-start */
+
+    id = mo.mochi[i].id;
+    name = mo.mochi[i].name;
+    mochi_img = mo.mochi[i].mochi_img;
+
+    if ( connectUser.some( el=> el.name === name ) ) {
+        console.log( '重複エラー' );
+    } else {
+        connectUser.push( { id: id, name: name, mochi_img: mochi_img } );
+        console.log( 'add' );
+        console.log("id",id);
+        console.log("name",name);
+        console.log("connectUser::::",connectUser);
+    }
+  }/* for-end */
+
+/////////////ただ全部表示はこれでできた
+/* https://teratail.com/questions/93120 */
+$(function(){
+    var src = connectUser.map(function(i){
+      console.log("/mochi_jpg/"+i.mochi_img);
+
+      return '<li class="mochi_list">' +
+        '<div id="mochi_type_photo"><a href="index.html"><img src="mochi_jpg/' + i.mochi_img+'" ' + 'alt=""></a></div>' +
+        '<div id="mochi_type_name">' +
+        '<a href="index.html">'+ i.name + '</a>' +
+        '</div>' +
+        '</li>';
+    })
+    .join('');
+
+    src = '<ul>' + src + '</ul>';
+    $('#headline_contents').append(src);
+});
+
+</script>
+</body>
+</html>

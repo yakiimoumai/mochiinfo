@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang='ja'>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="Content-Type" content="application/javascript; charset=utf-8"/>
+<link rel = "stylesheet" type="text/css" href="css/mochi.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>もちインフォ</title>
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <!-- クライアント側socket.ioを読み込む -->
+  <!--<script type="text/javascript" src="/socket.io/socket.io.js"></script>-->
+
+  <script>
+  $(document).ready(function(){
+    console.log("hoge");
+  });
+  </script>
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <h1 class="h1_center">MOCHI INFO</h1>
+
+  <ul id="sw_st">
+
+    <li id="sw_status01" class="mizu">
+      丸餅
+    </li>
+    <li id="sw_status02">
+      角餅
+    </li>
+    <li id="sw_status03">
+      大福餅
+    </li>
+    <li id="sw_status04">
+      草餅
+    </li>
+    <li id="sw_status05">
+      桜餅
+    </li>
+    <li id="sw_status06">
+      亥子餅
+    </li>
+    <li id="sw_status07">
+      五平餅
+    </li>
+    <li id="sw_status08">
+      蕨餅
+    </li>
+  </ul>
+  </header>
+
+<main id="mochi_display">
+
+  <div id="mochi_quiz">
+    <h2 id="m_name">もちの名前</h2>
+    <h3>Quiz:</h3>
+    <div id="m_quiz">クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。</div>
+  </div>
+
+  <div id="mochi_ans">
+    <!--<h2 id="m_name">もちの名前</h2>-->
+    <h3>Answer:</h3>
+    <div id="m_ans">答えの文章ダミー答えの文章ダミー、答えの文章ダミー答えの文章ダミー。</div>
+    <div id="m_img" class="img_l">画像</div>
+    <div id="m_info">詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。</div>
+  </div>
+
+</main>
+<script type="text/javascript" src="mochi_jsonp.js"></script>
+<script type="text/javascript">
+
+
+///////////////////////////////////socket end
+//// mochicallback JSONP読み込み開始
+////////callbk test
+
+////仮で入れてみる　1は丸餅
+var on_no = '1';
+var on_id = 'sw_status01';
+
+var txt01 = "1";
+
+const $li = document.querySelectorAll( '#sw_st>li' );
+document.querySelector( '#sw_st' ).onclick = e => {
+  if ( e.target === e.currentTarget ) return;
+    let item = e.target.closest( 'li' );
+    console.log("itemにいま何が",item);/*<li id="sw_status07">五平餅</li>*/
+    on_id = item.getAttribute("id");
+
+  if(on_id == 'sw_status01'){
+    on_no = '1';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status02'){
+    on_no = '2';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status03'){
+    on_no = '3';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status04'){
+    on_no = '4';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status05'){
+    on_no = '5';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status06'){
+    on_no = '6';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status07'){
+    on_no = '7';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status08'){
+    on_no = '8';
+    mochicallback(mo);
+  }
+
+
+  $li.forEach( n => n.classList[item === n?'add':'remove']('mizu'));
+
+  // for(var i=0;i<$li.length;i++){
+  //   $li[i].classList[item === n ? 'add':'remove']('mizu');
+  //   console.log("n--",n);
+  // }
+
+  //console.log("n2----",n);
+
+}; // 編集前のコードがli要素の中にあるHTML要素に対応できていなかったのを修正
+//20181125追記_end//
+
+
+//ページを開いたら、mochicallback(mo);を一回実行
+//もし次回も同じもちを選んだら、前と違う問題を表示
+
+
+var newLine = [];
+function mochicallback(mo){
+    //今どのもちが選ばれているか
+    //alert(mo.mochi[0].name);
+    console.log("on_no_callbk: ",on_no);
+
+    //filter mochi_typeがon_noと一致するものを選び
+    // 一致したもちの名前（ここでは各もちに４つずつ？）のidをnewLineという配列にする
+    var arr01 =[];
+    newLine = mo.mochi.filter(function(moo, index){
+      if (moo.mochi_type == on_no){
+        console.log("moo.id++++ :"+moo.id);
+        console.log("on_no02: "+ on_no);
+
+        arr01.push(moo.id);//mochi_typeが一致したもののid配列を作る
+        console.log("arr01: ",arr01);
+
+        return true;
+      }
+      //return true;//ここじゃだめ（全部でる）
+    });
+
+    console.log("newLine:",newLine);
+    console.log("arr01: ",arr01);
+
+    //idを配列の中からランダムな数値を1つrandom01に入れる
+    var random01 = arr01[Math.floor(Math.random()*arr01.length)];
+    console.log("random01: ",random01);
+
+    // var random01_1 = parseInt(random01) + 1;
+    // console.log("random01_1: ",random01_1);
+
+
+    //mo.mochi[random01]にすれば、出てくるはず
+    //var random01 = random01+1;//配列の最初が0なので調整
+    var test01 = mo.mochi[random01].name;////
+    console.log("test01: ",test01);
+
+    //idがm_nameのところに、Jsonpのもちの名を入れる
+    var h1_txt = document.getElementById("m_name");
+    h1_txt.innerHTML = mo.mochi[random01].name;
+
+    console.log("h1_txt: "+ h1_txt);
+    console.log("h1_txt_innerHTML:" + h1_txt.innerHTML);
+
+    //idがquizのところに、quizを入れる
+    var quiz_txt = document.getElementById("m_quiz");
+    quiz_txt.innerHTML = mo.mochi[random01].quiz;
+
+    //idが m_ansのところに、ansを入れる
+    var m_ans01 = document.getElementById("m_ans");
+    m_ans01.innerHTML = mo.mochi[random01].ans;
+
+
+////あとで
+    //idがm_imgのところに、mochi_imgを入れる
+    var m_img01 = document.getElementById("m_img");
+    //m_img01.innerHTML = mo.mochi[0].mochi_img;
+    m_img01.innerHTML =  "<img src=" + "i" +"/" + mo.mochi[random01].mochi_img + ">";
+////あとで
+    //idがm_infoのところに、infoを入れる
+    var m_info01 = document.getElementById("m_info");
+    m_info01.innerHTML = mo.mochi[random01].info;
+    console.log("m_info01.innerHTML",m_info01.innerHTML);
+
+
+setTime_a();
+}//mochicallback JSONP読み込み終了
+
+////////callbk test
+///////ページを開いたときに一回実行
+mochicallback(mo);
+
+console.log("newLine_out:",newLine);
+
+
+////いつこれを実行するか
+console.log("いつ？前:");
+
+
+txt01 = document.getElementById("m_name");
+txt01.innerHTML = on_no + "を表示";
+
+//setTime_a();
+var prev_timeout_id = null;
+
+function setTime_a(){
+  if(prev_timeout_id != null){
+    clearTimeout(prev_timeout_id);
+    console.log("clearTimeoutしました。");
+  }
+  //timeoutIDを取得
+  prev_timeout_id = setTimeout(function(){
+    txt01.innerHTML = on_no + "を終了";
+
+
+//document.getElementById("mochi_display").style.display ="block";
+
+
+    document.getElementById("mochi_quiz").style.display ="none";
+    document.getElementById("mochi_ans").style.display ="block";
+
+  },3000);
+  txt01.innerHTML = on_no + "を表示";
+  document.getElementById("mochi_quiz").style.display ="block";
+  document.getElementById("mochi_ans").style.display ="none";
+}
+
+// function clear_setTime_a(){
+//   clearInterval(setTime_a);
+//   console.log("clearIntervalしたつもり");
+// }
+
+console.log("いつ？後:");
+
+console.log("回ってないかてすと");
+</script>
+
+</div>
+</body>
+</html>

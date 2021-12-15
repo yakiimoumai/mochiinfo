@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang='ja'>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="Content-Type" content="application/javascript; charset=utf-8"/>
+<link rel = "stylesheet" type="text/css" href="css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mochi-QUiz</title>
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <!-- クライアント側socket.ioを読み込む -->
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+  <script>
+  $(document).ready(function(){
+    console.log("hoge");
+  });
+  </script>
+</head>
+
+<body>
+  <div id="wrapper">
+  <header>
+  <h1>MOCHI INFO</h1>
+  <ul id="sw_st">
+    <li>
+      <p>丸餅</p>
+      <div id="sw_status01"></div>
+    </li>
+    <li>
+      <p>角餅</p>
+      <div id="sw_status02"></div>
+    </li>
+    <li>
+      <p>大福餅</p>
+      <div id="sw_status03"></div>
+    </li>
+    <li>
+      <p>草餅</p>
+      <div id="sw_status04"></div>
+    </li>
+    <li>
+      <p>桜餅</p>
+      <div id="sw_status05"></div>
+    </li>
+    <li>
+      <p>亥子餅</p>
+      <div id="sw_status06"></div>
+    </li>
+    <li>
+      <p>五平餅</p>
+      <div id="sw_status07"></div>
+    </li>
+    <li>
+      <p>蕨餅</p>
+      <div id="sw_status08"></div>
+    </li>
+  </ul>
+  </header>
+
+<main id="mochi_display">
+
+  <div id="mochi_quiz">
+    <h2 id="m_name">もちの名前</h2>
+    <div id="m_quiz">クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。</div>
+  </div>
+
+  <div id="mochi_ans">
+    <!--<h2 id="m_name">もちの名前</h2>-->
+    <div id="m_ans">答えの文章ダミー答えの文章ダミー、答えの文章ダミー答えの文章ダミー。</div>
+    <div id="m_img">画像</div>
+    <div id="m_info">詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。</div>
+  </div>
+
+</main>
+
+<script type="text/javascript">
+//kokodato hairanai
+//var on_no = '5';
+
+var mo = {
+  "mochi":[
+    {
+    "mochi_type":"1",
+    "mochi_no":"0",
+    "name":"丸餅",
+    "quiz_no":"1",
+    "quiz":"丸もちの丸い形は何を意味する？",
+    "quiz_ans":"1.魂を象徴、2.農作物の豊作を象徴",
+    "mochi_img":"mochi01_01.jpg",
+    "mochi_info":"望月や鏡を模したからというのが有力。丸は魂を象徴するかたちであることから、「年のはじめに食べることで神の力を得ることができる」と考えられたという説や、丸は農作物の豊作を象徴することから縁起をかついだという説もある"
+    },{
+    "mochi_type":"1",
+    "mochi_no":"1",
+    "name":"丸餅",
+    "quiz_no":"2",
+    "quiz":"鏡餅の形は何を表しているか？",
+    "quiz_ans":"1.鏡、2.人の魂",
+    "mochi_img":"mochi01_02.jpg",
+    "mochi_info":"昔の鏡が丸い形で、人の魂を模したことに由来します。歳神様にお供えすることで、祝福を受けようとする信仰の名残。"
+    },{
+    "mochi_type":"1",
+    "mochi_no":"2",
+    "name":"丸餅",
+    "quiz_no":"3",
+    "quiz":"丸もちは日本のどの辺りでよく食べられている？",
+    "quiz_ans":"関西を中心に西日本",
+    "mochi_img":"mochi01_03.jpg",
+    "mochi_info":"関西地方のお雑煮は白味噌仕立てです。東日本と近畿を除く西日本では圧倒的にすまし汁仕立て。"
+    },{
+    "mochi_type":"1",
+    "mochi_no":"3",
+    "name":"丸餅",
+    "quiz_no":"4",
+    "quiz":"丸もちの調理方法はどうすることが多いか？",
+    "quiz_ans":"ゆでて食べる地域が多い。京都から離れると、焼いて食べるところも多い。",
+    "mochi_img":"mochi01_04.jpg",
+    "mochi_info":"円形は生命の根源であり神聖なものとされたため、刃物で切ることは禁忌であり、食べやすいように小餅にし、大きな丸もちは木槌などで割って食べる。"
+    },{
+    "mochi_type":"2",
+    "mochi_no":"4",
+    "name":"角餅",
+    "quiz_no":"1",
+    "quiz":"角もちは日本のどの辺りでよく食べられている？",
+    "quiz_ans":"関東を中心に東日本",
+    "mochi_img":"mochi02_01.jpg",
+    "mochi_info":"関東を中心に東日本に分布し、丸もちと角もちの境界線は関ヶ原と言われる。"
+    },{
+    "mochi_type":"2",
+    "mochi_no":"5",
+    "name":"角餅",
+    "quiz_no":"2",
+    "quiz":"角もちはどんな風に調理されることが多い？",
+    "quiz_ans":"焼いて食べることが多い。また関東のお雑煮は、醤油ベースのすまし汁。",
+    "mochi_img":"mochi02_02.jpg",
+    "mochi_info":"武士がいた時代に「味噌をつける」ことは、「失敗し、評判を落とす」という意味があったため、すまし汁が好まれるようになった。"
+    },{
+    "mochi_type":"2",
+    "mochi_no":"6",
+    "name":"角餅",
+    "quiz_no":"3",
+    "quiz":"東日本ではなぜ角もちが食べられるようになったか？",
+    "quiz_ans":"切り餅はのし餅を作って、切るだけなので便利。",
+    "mochi_img":"mochi02_03.jpg",
+    "mochi_info":"他の由来：「敵をのす」という意味でのし餅が使われるようになった。人口の多い江戸では家も狭く、手早く大量に作るために、のし餅を作り一気に切って角餅にしたともいわれている。"
+    },{
+    "mochi_type":"2",
+    "mochi_no":"7",
+    "name":"角餅",
+    "quiz_no":"4",
+    "quiz":"角もちと丸もちの分岐点はどこか？",
+    "quiz_ans":"関ヶ原（岐阜県の滋賀近く）",
+    "mochi_img":"mochi02_04.jpg",
+    "mochi_info":"関ヶ原の合戦の影響で、岐阜県関ヶ原を境に西日本が丸餅で東日本が角餅に分れたという説もある。ちなみに北陸では富山は角もちで、石川は丸もちである。"
+    },{
+    "mochi_type":"3",
+    "mochi_no":"8",
+    "name":"大福餅",
+    "quiz_no":"1",
+    "quiz":"大福餅の別名は？",
+    "quiz_ans":"腹太餅（はらぶともち）、大腹餅（だいふくもち）",
+    "mochi_img":"mochi03_01.jpg",
+    "mochi_info":"腹持ちがよいため、腹太餅（はらぶともち）、大腹餅（だいふくもち）と呼ばれていたが、吉字を使った大福になった。昔は焼いたものを大福餅、焼いていないものを生の餡餅と呼んだ。"
+    },{
+    "mochi_type":"3",
+    "mochi_no":"9",
+    "name":"大福餅",
+    "quiz_no":"2",
+    "quiz":"大福餅の生みの親は？",
+    "quiz_ans":"江戸・小石川の未亡人",
+    "mochi_img":"mochi03_02.jpg",
+    "mochi_info":"江戸時代初期に生まれた鶉餅（うずらもち）が1771年（明和8年）に江戸・小石川の未亡人により小形化され、餡に砂糖を加えられたものが始まりとされる(wikipedia)。"
+    },{
+    "mochi_type":"3",
+    "mochi_no":"10",
+    "name":"大福餅",
+    "quiz_no":"3",
+    "quiz":"大福餅の種類を4つ言ってください。",
+    "quiz_ans":"豆大福、いちご大福、草大福、塩大福、塩豆大福、梅大福、フルーツ大福、生クリーム大福、コーヒー大福、生チョコ大福、、",
+    "mochi_img":"mochi03_03.jpg",
+    "mochi_info":"何でもあり、、モンブラン大福、プリン大福、ティラミス大福、なんじゃこら大福、塩あんびん、ナガマシ、"
+    },{
+    "mochi_type":"3",
+    "mochi_no":"11",
+    "name":"大福餅",
+    "quiz_no":"4",
+    "quiz":"大福餅を英語でいうと？",
+    "quiz_ans":"「Daifuku」,「A rice cake stuffed with bean paste」",
+    "mochi_img":"mochi03_04.jpg",
+    "mochi_info":"「stuffed with...」は「一杯詰まっている」という意味、「bean jam」は「餡」という意味。"
+    },{
+    "mochi_type":"4",
+    "mochi_no":"12",
+    "name":"草餅",
+    "quiz_no":"1",
+    "quiz":"草餅にはよもぎ以外に使われている草がある、その名前は？",
+    "quiz_ans":"母子草（ははこぐさ）",
+    "mochi_img":"mochi04_01.jpg",
+    "mochi_info":"現代では草餅入っている草は主に蓬（よもぎ）だが、昔は母子草（春の七草のゴギョウ）で作られ、草餅でなく母子餅とよばれていた[wikipedia]"
+    },{
+    "mochi_type":"4",
+    "mochi_no":"13",
+    "name":"草餅",
+    "quiz_no":"2",
+    "quiz":"なぜ餅に草を練り込むのか？",
+    "quiz_ans":"草の香りは邪気を祓うと信じられていたから。",
+    "mochi_img":"mochi04_02.jpg",
+    "mochi_info":"草の香りには邪気を祓う力があると信じ、上巳の節句に黍麹草（鼠麹草、母子草）を混ぜ込んだ餅を食べる風習が、中国より伝わったとされ、平安時代には宮中行事の一つとして定着していた。[wikipedia]"
+    },{
+    "mochi_type":"4",
+    "mochi_no":"14",
+    "name":"草餅",
+    "quiz_no":"3",
+    "quiz":"草餅は江戸時代にはどのように使われていたか？",
+    "quiz_ans":"ひな祭り",
+    "mochi_img":"mochi04_03.jpg",
+    "mochi_info":"上巳の節句で菱餅は餅の白と草餅の緑の二色で作られることが多かった[wikipedia]。"
+    },{
+    "mochi_type":"4",
+    "mochi_no":"15",
+    "name":"草餅",
+    "quiz_no":"4",
+    "quiz":"草餅に使うよもぎの効能は？",
+    "quiz_ans":"若芽は健胃、腹痛、下痢、貧血、冷え性などに効果がある[wikipedia]。",
+    "mochi_img":"mochi04_04.jpg",
+    "mochi_info":"育ったものは、これも干しておき、風呂に入れたり、お灸のもぐさとしても使える。"
+    },{
+    "mochi_type":"5",
+    "mochi_no":"16",
+    "name":"桜餅",
+    "quiz_no":"1",
+    "quiz":"関東風の桜餅は別名何と呼ばれるか",
+    "quiz_ans":"長命寺餅",
+    "mochi_img":"mochi05_01.jpg",
+    "mochi_info":"関東では関東風の桜餅のことを長命寺餅と呼ぶことは少なく、「長命寺の桜餅」と称した場合、向島の「長命寺桜もち」製の桜餅を意味する[wikipedia]。小麦粉（白玉粉、餅粉を加える場合もある）にピンクの色素を加え、クレープのように焼く。丸めた案を包んで桜の葉を巻いて作る。"
+    },{
+    "mochi_type":"5",
+    "mochi_no":"17",
+    "name":"桜餅",
+    "quiz_no":"2",
+    "quiz":"関西風の桜餅は別名何と呼ばれているか",
+    "quiz_ans":"道明寺餅",
+    "mochi_img":"mochi05_02.jpg",
+    "mochi_info":"関西で作られている桜餅。道明寺餅または略して道明寺（どうみょうじ）ともいう。関西では関東風の桜餅を見ることはほとんどなく、桜餅といえば関西風の道明寺餅のことを指す[wikipedia]。道明寺粉を蒸し、あんを包んで桜の葉で包んで作る。"
+    },{
+    "mochi_type":"5",
+    "mochi_no":"18",
+    "name":"桜餅",
+    "quiz_no":"3",
+    "quiz":"関東風桜餅の由来は？",
+    "quiz_ans":"落葉の処理",
+    "mochi_img":"mochi05_03.jpg",
+    "mochi_info":"東京の隅田川沿いにある長命寺では、川沿いの桜の木から落ちる葉の掃除に日々頭を悩ませていました。そこで桜の葉を塩漬けにし、それにお餅を包んだのが始まりだとか。"
+    },{
+    "mochi_type":"5",
+    "mochi_no":"19",
+    "name":"桜餅",
+    "quiz_no":"4",
+    "quiz":"関西風桜餅の由来は？",
+    "quiz_ans":"保存食",
+    "mochi_img":"mochi05_04.jpg",
+    "mochi_info":"現在の大阪府藤井寺市に位置する道明寺で最初に作られ、保存食として使われたのが起源（道明寺粉は乾飯や煎り種の一種）。"
+    },{
+    "mochi_type":"6",
+    "mochi_no":"20",
+    "name":"亥の子餅",
+    "quiz_no":"1",
+    "quiz":"亥の子餅にはどんな意味があるか？",
+    "quiz_ans":"無病息災、子孫繁栄、収穫のお祝い（諸説ある）",
+    "mochi_img":"mochi06_01.jpg",
+    "mochi_info":"古代中国では、「亥の月、亥の日、亥の刻に餅を食べれば無病息災である」といわれた。多産なイノシシにあやかって子孫繁栄を願う意味もある。日本では主に収穫の祭りとして広がった[暮らし歳時記]。"
+    },{
+    "mochi_type":"6",
+    "mochi_no":"21",
+    "name":"亥の子餅",
+    "quiz_no":"2",
+    "quiz":"亥の子餅はいつ食べられるか？",
+    "quiz_ans":"旧暦10月（亥の月）最初の亥の日",
+    "mochi_img":"mochi06_02.jpg",
+    "mochi_info":"亥の子（旧暦10月（亥の月）の亥の日）の亥の刻（午後10時ごろ）に食べる。"
+    },{
+    "mochi_type":"6",
+    "mochi_no":"22",
+    "name":"亥の子餅",
+    "quiz_no":"3",
+    "quiz":"亥の子餅を食べる風習があるのはどの地域か？",
+    "quiz_ans":"西日本、九州から中国地方が中心",
+    "mochi_img":"mochi06_03.jpg",
+    "mochi_info":"東日本の「十日夜」と似ているといわれる。"
+    },{
+    "mochi_type":"6",
+    "mochi_no":"23",
+    "name":"亥の子餅",
+    "quiz_no":"4",
+    "quiz":"亥の子餅を食べる亥の子行事とはどんなものか？",
+    "quiz_ans":"旧暦10月の亥の日に収穫を祝う。新穀で餅を搗き、亥の子餅を作ったり、子供が組をつくって丸い石や藁(わら)鉄砲で地面をたたく所が多い[日本大百科全書(ニッポニカ)]。",
+    "mochi_img":"mochi06_04.jpg",
+    "mochi_info":""
+    },{
+    "mochi_type":"7",
+    "mochi_no":"24",
+    "name":"五平餅",
+    "quiz_no":"1",
+    "quiz":"五平餅はどの地域に伝わる郷土料理か？",
+    "quiz_ans":"中部地方の山間部",
+    "mochi_img":"mochi07_01.jpg",
+    "mochi_info":"中部地方の山間部（長野県木曽・伊那地方、岐阜県東濃・飛騨地方、富山県南部、愛知県奥三河地方、静岡県北遠・駿河地方や山梨県）に伝わる郷土料理、基本的に山の食べ物。"
+    },{
+    "mochi_type":"7",
+    "mochi_no":"25",
+    "name":"五平餅",
+    "quiz_no":"2",
+    "quiz":"五平餅の名前の由来は？",
+    "quiz_ans":"1.昔神事に使っていた「御幣」に似ている。2.五合のお米で作った餅で、平らな形だから。3.五平という人が作った",
+    "mochi_img":"mochi07_02.jpg",
+    "mochi_info":""
+    },{
+    "mochi_type":"7",
+    "mochi_no":"26",
+    "name":"五平餅",
+    "quiz_no":"3",
+    "quiz":"五平餅の起源は？",
+    "quiz_ans":"「山の講」のお供え説、山の仕事（林業従事者）の携帯食や保存食説、五平さん考案説",
+    "mochi_img":"mochi07_03.jpg",
+    "mochi_info":"山の講とは、山の神様をお祭りする行事。山の仕事の携帯用、保存用、炭焼きなどの窯を作った際に窯の前に供えたとする説。五平さんは農民、きこり、炭焼き、荷稼ぎだったなど多くの説がある[とよた五平餅]。"
+    },{
+    "mochi_type":"7",
+    "mochi_no":"27",
+    "name":"五平餅",
+    "quiz_no":"4",
+    "quiz":"五平餅のタレは何が使われている？",
+    "quiz_ans":"醤油、味噌、ごま、くるみ、えごま、はちみつ、ヘボ、卵など色々ある",
+    "mochi_img":"mochi07_04.jpg",
+    "mochi_info":"タレは季節や地方毎に多彩で醤油または味噌に、胡麻、胡桃、エゴマなど油脂を含むものや木の芽、柚味噌[2]をあわせてタレを作る。砂糖を入れかなり甘めの味に仕立てる[wikipedia]。"
+    },{
+    "mochi_type":"8",
+    "mochi_no":"28",
+    "name":"わらびもち",
+    "quiz_no":"1",
+    "quiz":"わらびもちは何からできているか？",
+    "quiz_ans":"蕨の地下茎のデンプン、水、砂糖",
+    "mochi_img":"mochi08_01.jpg",
+    "mochi_info":"蕨の根のデンプンは現在は高級わらびもちに使われ、普段のわらびもちには甘藷でデンプン、タピオカなどが使われることが多い。"
+    },{
+    "mochi_type":"8",
+    "mochi_no":"29",
+    "name":"わらびもち",
+    "quiz_no":"2",
+    "quiz":"わらびもちの別名は何という？",
+    "quiz_ans":"岡大夫",
+    "mochi_img":"mochi08_02.jpg",
+    "mochi_info":"醍醐天皇の好物で、大夫の位を授けたという言い伝えがある[大蔵虎明能狂言集 1642]。"
+    },{
+    "mochi_type":"8",
+    "mochi_no":"30",
+    "name":"わらびもち",
+    "quiz_no":"3",
+    "quiz":"東海道でわらびもちが有名だった宿場町は？",
+    "quiz_ans":"日坂",
+    "mochi_img":"mochi08_03.jpg",
+    "mochi_info":"東海道の日坂宿（現在の静岡県掛川市日坂）で1544年頃に名物とされたが、日坂は葛も有名な地域で、葛粉で作ったものをわらびもちとして売っていたという話もある。"
+    },{
+    "mochi_type":"8",
+    "mochi_no":"31",
+    "name":"わらびもち",
+    "quiz_no":"4",
+    "quiz":"わらびもちの調理方法は？",
+    "quiz_ans":"わらび粉と砂糖を水でといて、中火で練る。",
+    "mochi_img":"mochi08_04.jpg",
+    "mochi_info":"わらび粉と砂糖を水でといて、中火で練り、透明になってきたら火を止めて冷まし、きなこや黒蜜をかけて食べる。"
+    }
+  ]
+};
+
+/////////////////////////////////socket
+//もしステータスが1になったらの処理
+//m01-m08に現在の状態（0か1）を入れる
+	console.log('test: '+document.getElementById("sw_status01").innerHTML);
+
+    var m01 = document.getElementById("sw_status01").innerHTML;
+    console.log("m01: " + m01);
+    var m02 = document.getElementById("sw_status02").innerHTML;
+    console.log("m02: " + m02);
+    var m03 = document.getElementById("sw_status03").innerHTML;
+    console.log("m03: " + m03);
+
+    var m04 = document.getElementById("sw_status04").innerHTML;
+    console.log("m04: " + m04);
+    var m05 = document.getElementById("sw_status05").innerHTML;
+    console.log("m05: " + m05);
+    var m06 = document.getElementById("sw_status06").innerHTML;
+    console.log("m06: " + m06);
+
+    var m07 = document.getElementById("sw_status07").innerHTML;
+    console.log("m07: " + m07);
+    var m08 = document.getElementById("sw_status08").innerHTML;
+    console.log("m08: " + m08);
+    //ステータスのチェック　end
+
+//どれが1になったかを判定
+//trimしないと変なスペースが入る
+
+//仮でm01に1を入れとく
+//m01='1';
+
+//var on_no='0';
+var on_no = '1';
+if(m01.trim() == '1'){
+  on_no ='1';
+  console.log("m01: "+m01);
+  console.log("m01.trim: "+m01.trim());
+}
+if(m02.trim() == '1'){
+  on_no ='2';
+}
+if(m03.trim() == '1'){
+  on_no ='3';
+}
+if(m04.trim() == '1'){
+  on_no ='4';
+}
+if(m05.trim() == '1'){
+  on_no ='5';
+}
+if(m06.trim() == '1'){
+  on_no ='6';
+}
+if(m07.trim() == '1'){
+  on_no ='7';
+}
+if(m08.trim() == '1'){
+  on_no ='8';
+console.log("m08: "+m08);
+console.log("m08.trim: "+m08.trim());
+console.log("on_no01: "+on_no);
+}
+
+
+// websocketコネクションを確立
+var socket = io.connect();
+
+// サーバーからswitch_dataのデータが来たら呼ばれるコールバック関数を定義
+
+////switch_data01
+socket.on("switch_data01", function(data){
+console.log("m01-01: "+m01);
+console.log("m01-01_on_no: "+m01);
+  // htmlの表示を書き換える
+  document.getElementById("sw_status01").innerHTML = data.value;
+m01 = data.value;
+
+  if(1 == data.value){
+    on_no ='1';
+    console.log("m01-02: "+m01);
+    console.log("m01-02_on_no: "+m01);
+    console.log("m01-02.trim: "+m01.trim());
+    mochicallback(mo);
+    document.getElementById("mochi_display").style.display ="block";
+
+    setInterval(function(){
+      document.getElementById("mochi_quiz").style.display ="none";
+      document.getElementById("mochi_ans").style.display ="block";
+    },10000);
+    document.getElementById("mochi_quiz").style.display ="block";
+    document.getElementById("mochi_ans").style.display ="none";
+  }
+});
+
+////switch_data02
+socket.on("switch_data02", function(data){
+console.log("m02-01: "+m02);
+console.log("m02-01_on_no: "+m02);
+  // htmlの表示を書き換える OK
+  document.getElementById("sw_status02").innerHTML = data.value;
+console.log("data02: "+data.value);//OK
+m02 = data.value;
+console.log("m02_ck: "+m02);//ok
+  if('1' == data.value){
+    on_no ='2';
+    console.log("m02-02_on=no: "+on_no);
+	 console.log("m02-02_on_no: "+m02);
+    console.log("m02-02.trim: "+m02.trim());
+	//mochicallback();//dousitaraiino??
+
+  mochicallback(mo);
+  document.getElementById("mochi_display").style.display ="block";
+  setInterval(function(){
+    document.getElementById("mochi_quiz").style.display ="none";
+    document.getElementById("mochi_ans").style.display ="block";
+  },10000);
+  document.getElementById("mochi_quiz").style.display ="block";
+  document.getElementById("mochi_ans").style.display ="none";
+  }
+});
+
+
+
+//switch_data03
+socket.on("switch_data03", function(data){
+  // htmlの表示を書き換える
+  document.getElementById("sw_status03").innerHTML = data.value;
+m03 = data.value;
+
+  if(1 == data.value){
+    on_no ='3';
+    mochicallback(mo);
+    document.getElementById("mochi_display").style.display ="block";
+    setInterval(function(){
+      document.getElementById("mochi_quiz").style.display ="none";
+      document.getElementById("mochi_ans").style.display ="block";
+    },10000);
+    document.getElementById("mochi_quiz").style.display ="block";
+    document.getElementById("mochi_ans").style.display ="none";
+
+  }
+});
+
+//switch_data04
+socket.on("switch_data04", function(data){
+  // htmlの表示を書き換える
+  document.getElementById("sw_status04").innerHTML = data.value;
+m04 = data.value;
+
+  if(1 == data.value){
+    on_no ='4';
+    mochicallback(mo);
+    document.getElementById("mochi_display").style.display ="block";
+
+    setInterval(function(){
+      document.getElementById("mochi_quiz").style.display ="none";
+      document.getElementById("mochi_ans").style.display ="block";
+    },10000);
+    document.getElementById("mochi_quiz").style.display ="block";
+    document.getElementById("mochi_ans").style.display ="none";
+
+  }
+});
+
+//switch_data05
+socket.on("switch_data05", function(data){
+  // htmlの表示を書き換える
+  document.getElementById("sw_status05").innerHTML = data.value;
+m05 = data.value;
+
+  if(1 == data.value){
+    on_no ='5';
+    console.log(on_no);
+    mochicallback(mo);
+    document.getElementById("mochi_display").style.display ="block";
+
+    setInterval(function(){
+      document.getElementById("mochi_quiz").style.display ="none";
+      document.getElementById("mochi_ans").style.display ="block";
+    },10000);
+    document.getElementById("mochi_quiz").style.display ="block";
+    document.getElementById("mochi_ans").style.display ="none";
+  }
+});
+
+//switch_data06
+socket.on("switch_data06", function(data){
+  // htmlの表示を書き換える
+  document.getElementById("sw_status06").innerHTML = data.value;
+m06 = data.value;
+  if(1 == data.value){
+    on_no ='6';
+    mochicallback(mo);
+    document.getElementById("mochi_display").style.display ="block";
+
+    setInterval(function(){
+      document.getElementById("mochi_quiz").style.display ="none";
+      document.getElementById("mochi_ans").style.display ="block";
+    },3000);
+    document.getElementById("mochi_quiz").style.display ="block";
+    document.getElementById("mochi_ans").style.display ="none";
+  }
+});
+
+//switch_data07
+socket.on("switch_data07", function(data){
+  // htmlの表示を書き換える
+  document.getElementById("sw_status07").innerHTML = data.value;
+m07 = data.value;
+
+  if(1 == data.value){
+    on_no ='7';
+    console.log(on_no);
+    mochicallback(mo);
+    document.getElementById("mochi_display").style.display ="block";
+    setInterval(function(){
+      document.getElementById("mochi_quiz").style.display ="none";
+      document.getElementById("mochi_ans").style.display ="block";
+    },3000);
+    document.getElementById("mochi_quiz").style.display ="block";
+    document.getElementById("mochi_ans").style.display ="none";
+  }
+});
+
+//switch_data08
+socket.on("switch_data08", function(data){
+  // htmlの表示を書き換える
+  document.getElementById("sw_status08").innerHTML = data.value;
+m08 = data.value;
+  if(1 == data.value){
+    on_no ='8';
+    console.log(on_no);
+    mochicallback(mo);
+    document.getElementById("mochi_display").style.display ="block";
+    setInterval(function(){
+      document.getElementById("mochi_quiz").style.display ="none";
+      document.getElementById("mochi_ans").style.display ="block";
+    },3000);
+    document.getElementById("mochi_quiz").style.display ="block";
+    document.getElementById("mochi_ans").style.display ="none";
+  }
+});
+
+
+
+///////////////////////////////////socket end
+
+//// mochicallback JSONP読み込み開始
+////////callbk test
+
+function mochicallback(mo){
+    //alert(mo.mochi[0].name);
+////仮で入れてみる
+//var on_no = '5';
+//alert(mo.mochi[0].name);
+console.log("on_no_callbk: "+ on_no);
+
+//filter mochi_typeがon_noと一致するものを選び
+// 一致したもののmochi_noを配列にする
+
+var arr01 =[];
+var newLine = mo.mochi.filter(function(moo, index){
+  if (moo.mochi_type == on_no){
+    console.log("moo.mochi_no++++ :"+moo.mochi_no);
+    console.log("on_no02: "+ on_no);
+
+    arr01.push(moo.mochi_no);//一致したものの配列を作る
+    return true;
+  }
+});
+
+console.log("newLine: " + newLine);
+console.log("arr01: "+ arr01);
+
+//mochi_noを配列の中からランダムな数値を1つrandom01に入れる
+var random01 = arr01[Math.floor(Math.random()*arr01.length)];
+console.log("random01: "+ random01);
+
+//mo.mochi[random01]にすれば、出てくるはず
+//var random01 = random01+1;//配列の最初が0なので調整
+
+var test01 = mo.mochi[random01].name;
+console.log("test01: "+test01);
+
+//$('h1').append(test01);
+
+//idがm_nameのところに、Jsonpのもちの名を入れる
+var h1_txt = document.getElementById("m_name");
+h1_txt.innerHTML = mo.mochi[random01].name;
+
+console.log("h1_txt: "+ h1_txt);
+console.log("h1_txt_innerHTML:" + h1_txt.innerHTML);
+
+//idがquizのところに、quizを入れる
+var quiz_txt = document.getElementById("m_quiz");
+quiz_txt.innerHTML = mo.mochi[random01].quiz;
+
+//idが m_ansのところに、quiz_ansを入れる
+var m_ans01 = document.getElementById("m_ans");
+m_ans01.innerHTML = mo.mochi[random01].quiz_ans;
+
+//idがm_imgのところに、mochi_imgを入れる
+var m_img01 = document.getElementById("m_img");
+//m_img01.innerHTML = mo.mochi[0].mochi_img;
+m_img01.innerHTML =  "<img src=" + "i" +"/" + mo.mochi[random01].mochi_img + ">";
+
+//idがm_infoのところに、mochi_infoを入れる
+var m_info01 = document.getElementById("m_info");
+m_info01.innerHTML = mo.mochi[random01].mochi_info;
+
+}//mochicallback JSONP読み込み終了
+
+////////callbk test
+
+/////////////////
+
+  document.getElementById("mochi_display").style.display ="block";
+
+  setInterval(function(){
+    document.getElementById("mochi_quiz").style.display ="none";
+    document.getElementById("mochi_ans").style.display ="block";
+  },3000);
+  document.getElementById("mochi_quiz").style.display ="block";
+  document.getElementById("mochi_ans").style.display ="none";
+
+
+</script>
+  <!--<script type="text/javascript" src="js/mochi_jsonp.js"></script>-->
+</div>
+</body>
+</html>

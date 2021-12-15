@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang='ja'>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="Content-Type" content="application/javascript; charset=utf-8"/>
+<link rel = "stylesheet" type="text/css" href="css/mochi.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
+<link href="https://fonts.googleapis.com/earlyaccess/nikukyu.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/earlyaccess/nicomoji.css" rel="stylesheet">
+
+  <title>もちインフォ</title>
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <!-- クライアント側socket.ioを読み込む -->
+  <!--<script type="text/javascript" src="/socket.io/socket.io.js"></script>-->
+  <script>
+  $(document).ready(function(){
+    console.log("hoge");
+  });
+  </script>
+</head>
+
+<body>
+  <div id="headline_contents">
+    <h1 class="wf-nicomoji">もちインフォ</h1>
+    <p class="f_blue">知りたいもちをタップしよう</p>
+  </div>
+
+  <div id="wrapper">
+  <header>
+  <h1 class="wf-nicomoji">もちクイズ</h1>
+
+  <ul id="sw_st">
+
+    <!-- <li id="sw_status01" class="mizu"> -->
+    <li id="sw_status01">
+      丸餅
+    </li>
+    <li id="sw_status02">
+      角餅
+    </li>
+    <li id="sw_status03">
+      大福餅
+    </li>
+    <li id="sw_status04">
+      草餅
+    </li>
+    <li id="sw_status05">
+      桜餅
+    </li>
+    <li id="sw_status06">
+      亥子餅
+    </li>
+    <li id="sw_status07">
+      五平餅
+    </li>
+    <li id="sw_status08">
+      蕨餅
+    </li>
+  </ul>
+  </header>
+
+<main id="mochi_display">
+  <div id="mochi_quiz">
+    <h2 id="m_name">もちの名前</h2>
+    <h3>Quiz:</h3>
+    <div id="m_quiz">クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。クイズの文章ダミー。</div>
+  </div>
+
+  <div id="mochi_ans">
+    <!--<h2 id="m_name">もちの名前</h2>-->
+    <h3>Answer:</h3>
+    <div id="m_ans">答えの文章ダミー答えの文章ダミー、答えの文章ダミー答えの文章ダミー。</div>
+    <div id="m_img" class="img_l">画像</div>
+    <div id="m_info">詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。詳細の文章ダミー。</div>
+  </div>
+
+</main>
+
+<script type="text/javascript" src="mochi_jsonp.js"></script>
+<script>
+/*最初の画面*/
+// if(){
+//   document.getElementById("mochi_quiz").style.display ="none";
+//   document.getElementById("mochi_ans").style.display ="none";
+// }
+console.log("length",mo.mochi.length);
+var test_name = mo.mochi[1].name;
+var connectName=[];
+arrayCnt = mo.mochi.length;
+var beforeExists = false;
+var id;
+var name;
+var mochi_img;
+var before_name;
+var isUserExists = false;
+var keep_mochi_type = "";
+var on_no = '1';
+
+//ここに書いていいのか？
+document.getElementById("wrapper").style.display ="none";
+
+////これで出来たらいいのだが
+console.log("arrayCnt",arrayCnt);
+var connectUser = [];
+
+//function add( id, name ,img ) {
+  for(var i=0;i<mo.mochi.length;++i){ /* for-start */
+
+    id = mo.mochi[i].id;
+    name = mo.mochi[i].name;
+    mochi_img = mo.mochi[i].mochi_img;
+    mochi_type = mo.mochi[i].mochi_type;
+
+    if ( connectUser.some( el=> el.name === name ) ) {
+        console.log( '重複エラー' );
+    } else {
+        connectUser.push( { id: id, name: name, mochi_img: mochi_img, mochi_type } );
+        console.log( 'add' );
+        console.log("id",id);
+        console.log("name",name);
+        console.log("mochi_type",mochi_type);
+        console.log("connectUser::::",connectUser);
+    }
+  } /* for-end */
+
+/////////////ただ全部表示はこれでできた
+/* https://teratail.com/questions/93120 */
+var testtest = "test";
+$(function(){
+    var src = connectUser.map(function(i){
+      console.log("/mochi_jpg/"+i.mochi_img);
+      console.log("/mochi_type/"+i.mochi_type);
+
+      return '<li class="mochi_list">' +
+        '<div id="mochi_type_photo"><a href="#"><img src="mochi_jpg/' + i.mochi_img+'" ' + 'alt="" '+'id="'+i.mochi_type+'"></a></div>' +
+        '<div id="mochi_type_name">' +
+        '<a href="index.html">'+ i.name + '</a>' +
+        '</div>' +
+        '</li>';
+        //console.log("keep_mochi_type",keep_mochi_type);
+    })
+    .join('');
+    src = '<ul>' + src + '</ul>';
+    $('#headline_contents').append(src);
+
+    //imgのidを取得
+    $(function(){ ////1function_start
+      $(document).on('click', 'li', function(){ ////click-start01
+        console.log($(this).find('img').attr('id'));
+        keep_mochi_type = $(this).find('img').attr('id');
+        console.log("keep_mochi_type--",keep_mochi_type);
+        testtest = "phi";
+        console.log("testtest1 :",testtest);
+
+        ////class mizuを追加_start
+        var mizu_obj = document.getElementById('sw_st');
+        var mizu_list = mizu_obj.classList;
+        console.log("mizu_list: ",mizu_obj.mizu_list);
+        //mizu_obj.mizu_list.add('mizu');
+        var result = mizu_obj.classList.contains('mizu');
+        ////class mizuを追加_end
+
+        if(keep_mochi_type == "1"){
+          console.log("testtest1 :",testtest);
+          on_no = '1';
+          console.log("on_no :",on_no);
+          mochicallback(mo);
+			////??ここで <li id="sw_status01">にclass="mizu"を付けられたら
+          document.getElementById("sw_status01").classList.add("mizu");
+          //ここでid="headline_contents"を隠し、id="wrapper"を表示する
+          document.getElementById("headline_contents").style.display ="none";
+          document.getElementById("wrapper").style.display ="block";
+        }
+        if(keep_mochi_type == "2"){
+          console.log("testtest2 :",testtest);
+          on_no = '2';
+          console.log("on_no :",on_no);
+          mochicallback(mo);
+          document.getElementById("sw_status02").classList.add("mizu");
+          //ここでid="headline_contents"を隠し、id="wrapper"を表示する
+          document.getElementById("headline_contents").style.display ="none";
+          document.getElementById("wrapper").style.display ="block";
+        }
+        if(keep_mochi_type == "3"){
+          console.log("testtest3 :",testtest);
+          on_no = '3';
+          console.log("on_no :",on_no);
+          mochicallback(mo);
+          document.getElementById("sw_status03").classList.add("mizu");
+          //ここでid="headline_contents"を隠し、id="wrapper"を表示する
+          document.getElementById("headline_contents").style.display ="none";
+          document.getElementById("wrapper").style.display ="block";
+        }
+        if(keep_mochi_type == "4"){
+          console.log("testtest4 :",testtest);
+          on_no = '4';
+          console.log("on_no :",on_no);
+          mochicallback(mo);
+          document.getElementById("sw_status04").classList.add("mizu");
+          //ここでid="headline_contents"を隠し、id="wrapper"を表示する
+          document.getElementById("headline_contents").style.display ="none";
+          document.getElementById("wrapper").style.display ="block";
+        }
+        if(keep_mochi_type == "5"){
+          console.log("testtest5 :",testtest);
+          on_no = '5';
+          console.log("on_no :",on_no);
+          mochicallback(mo);
+          document.getElementById("sw_status05").classList.add("mizu");
+          //ここでid="headline_contents"を隠し、id="wrapper"を表示する
+          document.getElementById("headline_contents").style.display ="none";
+          document.getElementById("wrapper").style.display ="block";
+        }
+        if(keep_mochi_type == "6"){
+          console.log("testtest6 :",testtest);
+          on_no = '6';
+          console.log("on_no :",on_no);
+          mochicallback(mo);
+          document.getElementById("sw_status06").classList.add("mizu");
+          //ここでid="headline_contents"を隠し、id="wrapper"を表示する
+          document.getElementById("headline_contents").style.display ="none";
+          document.getElementById("wrapper").style.display ="block";
+        }
+        if(keep_mochi_type == "7"){
+          console.log("testtest7 :",testtest);
+          on_no = '7';
+          console.log("on_no :",on_no);
+          mochicallback(mo);
+          document.getElementById("sw_status07").classList.add("mizu");
+          //ここでid="headline_contents"を隠し、id="wrapper"を表示する
+          document.getElementById("headline_contents").style.display ="none";
+          document.getElementById("wrapper").style.display ="block";
+        }
+        if(keep_mochi_type == "8"){
+          console.log("testtest8 :",testtest);
+          on_no = '8';
+          console.log("on_no :",on_no);
+          mochicallback(mo);
+          document.getElementById("sw_status08").classList.add("mizu");
+          //ここでid="headline_contents"を隠し、id="wrapper"を表示する
+          document.getElementById("headline_contents").style.display ="none";
+          document.getElementById("wrapper").style.display ="block";
+        }
+        /* 古いバージョンのブラウザで動かすためforに */
+      });////click-end01
+    });////1function_end
+// console.log("keep_mochi_type02 :",keep_mochi_type);
+// console.log("testtest2 :",testtest);
+});
+//////////////ここまで画面１の処理////////////////////
+
+
+///////////////////////////////////socket end
+//// mochicallback JSONP読み込み開始
+////////callbk test
+// console.log("keep_mochi_type03 :",keep_mochi_type);
+// console.log("testtest3 :",testtest);
+////仮で入れてみる　1は丸餅
+
+var on_id = 'sw_status01';
+var txt01 = "1";
+
+const $li = document.querySelectorAll( '#sw_st>li' );
+document.querySelector( '#sw_st' ).onclick = e => { //click_start
+  if ( e.target === e.currentTarget ) return;
+    let item = e.target.closest( 'li' );
+    console.log("itemにいま何が",item);/*<li id="sw_status07">五平餅</li>*/
+    on_id = item.getAttribute("id");
+
+  if(on_id == 'sw_status01'){
+    on_no = '1';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status02'){
+    on_no = '2';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status03'){
+    on_no = '3';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status04'){
+    on_no = '4';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status05'){
+    on_no = '5';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status06'){
+    on_no = '6';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status07'){
+    on_no = '7';
+    mochicallback(mo);
+  }else if(on_id == 'sw_status08'){
+    on_no = '8';
+    mochicallback(mo);
+  }
+
+  /* 新しいバージョンのブラウザでしか動かない */
+  //$li.forEach( n => n.classList[item === n?'add':'remove']('mizu'));
+
+  /* 古いバージョンのブラウザで動かすためforに */
+  for(var i=0;i<$li.length;i++){
+    $li[i].classList[item === $li[i] ? 'add':'remove']('mizu');
+    console.log("item--",item);
+    console.log("i--",i);
+  }
+
+  //console.log("n2----",n);
+
+}; //click_end
+// 編集前のコードがli要素の中にあるHTML要素に対応できていなかったのを修正
+//20181125追記_end//
+
+
+//ページを開いたら、mochicallback(mo);を一回実行
+//もし次回も同じもちを選んだら、前と違う問題を表示
+
+
+var newLine = [];
+function mochicallback(mo){
+    //今どのもちが選ばれているか
+    //alert(mo.mochi[0].name);
+    console.log("on_no_callbk: ",on_no);
+
+    //filter mochi_typeがon_noと一致するものを選び
+    // 一致したもちの名前（ここでは各もちに４つずつ？）のidをnewLineという配列にする
+    var arr01 =[];
+    newLine = mo.mochi.filter(function(moo, index){
+      if (moo.mochi_type == on_no){
+        console.log("moo.id++++ :"+moo.id);
+        console.log("on_no02: "+ on_no);
+
+        arr01.push(moo.id);//mochi_typeが一致したもののid配列を作る
+        console.log("arr01: ",arr01);
+
+        return true;
+      }
+      //return true;//ここじゃだめ（全部でる）
+    });
+
+    console.log("newLine:",newLine);
+    console.log("arr01: ",arr01);
+
+    //idを配列の中からランダムな数値を1つrandom01に入れる
+    var random01 = arr01[Math.floor(Math.random()*arr01.length)];
+    console.log("random01: ",random01);
+
+    // var random01_1 = parseInt(random01) + 1;
+    // console.log("random01_1: ",random01_1);
+
+
+    //mo.mochi[random01]にすれば、出てくるはず
+    //var random01 = random01+1;//配列の最初が0なので調整
+    var test01 = mo.mochi[random01].name;////
+    console.log("test01: ",test01);
+
+    //idがm_nameのところに、Jsonpのもちの名を入れる
+    var h1_txt = document.getElementById("m_name");
+    h1_txt.innerHTML = mo.mochi[random01].name;
+    console.log("h1_txt: "+ h1_txt);
+    console.log("h1_txt_innerHTML:" + h1_txt.innerHTML);
+
+    //idがquizのところに、quizを入れる
+    var quiz_txt = document.getElementById("m_quiz");
+    quiz_txt.innerHTML = mo.mochi[random01].quiz;
+
+    //idが m_ansのところに、ansを入れる
+    var m_ans01 = document.getElementById("m_ans");
+    m_ans01.innerHTML = mo.mochi[random01].ans;
+
+
+////あとで
+    //idがm_imgのところに、mochi_imgを入れる
+    var m_img01 = document.getElementById("m_img");
+    //m_img01.innerHTML = mo.mochi[0].mochi_img;
+    m_img01.innerHTML =  "<img src=" + "i" +"/" + mo.mochi[random01].mochi_img + ">";
+////あとで
+    //idがm_infoのところに、infoを入れる
+    var m_info01 = document.getElementById("m_info");
+    m_info01.innerHTML = mo.mochi[random01].info;
+    console.log("m_info01.innerHTML",m_info01.innerHTML);
+
+
+setTime_a();
+}//mochicallback JSONP読み込み終了
+
+////////callbk test
+///////ページを開いたときに一回実行
+mochicallback(mo);
+
+console.log("newLine_out:",newLine);
+
+
+////いつこれを実行するか
+console.log("いつ？前:");
+
+
+// txt01 = document.getElementById("m_name");
+// txt01.innerHTML = on_no + "を表示";
+
+//setTime_a();
+var prev_timeout_id = null;
+
+function setTime_a(){
+  if(prev_timeout_id != null){
+    clearTimeout(prev_timeout_id);
+    console.log("clearTimeoutしました。");
+  }
+  //timeoutIDを取得
+  prev_timeout_id = setTimeout(function(){
+    //txt01.innerHTML = on_no + "を終了";
+
+
+//document.getElementById("mochi_display").style.display ="block";
+
+
+    document.getElementById("mochi_quiz").style.display ="none";
+    document.getElementById("mochi_ans").style.display ="block";
+
+  },3000);
+  //txt01.innerHTML = on_no + "を表示";
+  document.getElementById("mochi_quiz").style.display ="block";
+  document.getElementById("mochi_ans").style.display ="none";
+}
+
+console.log("いつ？後:");
+
+console.log("回ってないかてすと");
+</script>
+
+</div>
+</body>
+</html>

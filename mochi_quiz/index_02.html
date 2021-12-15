@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>もちクイズ</title>
+<link rel="stylesheet" href="flag.css">
+<script src="jquery.min.js"></script>
+
+</head>
+<body>
+
+  <div id="content">
+<dl id="level">
+<!-- 1:もちの名前
+    2:地名
+    3:日時
+    4:材料
+    5:起源、歴史
+-->
+    <dt>クイズ種類</dt>
+      <dd><a id="level1" href="#" class="active">もちの名前</a></dd>
+      <dd><a id="level2" href="#">地名</a></dd>
+      <dd><a id="level3" href="#">日時</a></dd>
+      <dd><a id="level4" href="#">材料</a></dd>
+      <dd><a id="level5" href="#">起源、歴史</a></dd>
+      <dd><a id="level6" href="#">調理方法</a></dd>
+    </dl>
+
+    <div id="question">
+        <div id="flag"></div>
+        <div id="quizz"></div>
+        <ul id="answer"></ul>
+    </div>
+
+    <div id="explain">
+        <div id="explain_photo"></div>
+        <div id="explain_txt"></div>
+        <div id="explain_next"><a id="next" href="#">次の餅へ</a></div>
+    </div>
+
+
+  </div>
+
+<script src="flag.js"></script>
+</body>
+</html>

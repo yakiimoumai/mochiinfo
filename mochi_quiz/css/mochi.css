@@ -1,0 +1,473 @@
+@charset "UTF-8";
+
+body {
+	margin: 0 auto;
+	padding: 0;
+	text-align: left;
+}
+#content {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 20px auto 40px;
+
+	background: url(img/bg1.jpg) no-repeat center;
+	background-size: cover;
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+}
+#content:before {
+	content: "";
+	background: inherit;
+	filter: blur(10px);
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	left: -10px;
+	bottom: -10px;
+	z-index: -1;*/
+}
+a {
+	color: #fff;
+}
+a:visited {
+	color: #fff;
+}
+
+#question{
+	width:100%;
+	/*border: solid 1px #f00;*/
+	text-align: center;
+	margin: 0 auto;
+}
+
+#answer{
+	width:100%;
+	/*border: solid 1px #f00;*/
+}
+#flag {
+	background: url(img/bgflag.png) no-repeat center;
+	background-size: cover;
+	text-align: center;
+	width: 720px;
+	/*width: 90%;*/
+	margin: 0 auto;
+
+	/*border: solid 1px #f00;*/
+}
+#flag img {
+	width: 100%;
+	/*border: solid 1px #00f;*/
+}
+
+#quizz{
+	font-size: 3em;
+}
+ul#answer {
+	list-style-type: none;
+	text-align: center;
+	width: 96%;
+	margin: 30px auto 0;
+	padding: 0;
+	font-size: 24px;
+}
+ul#answer li {
+	margin: 10px auto 0;
+}
+ul#answer li a {
+	display: block;
+	background-size: contain;
+	text-decoration: none;
+	padding: 30px 0;
+}
+ul#answer li a:active {
+	position: relative;
+	top: 4px;
+}
+li#li1 a {
+	background: url(img/answer_1.png) no-repeat center;
+}
+li#li2 a {
+	background: url(img/answer_2.png) no-repeat center;
+}
+li#li3 a {
+	background: url(img/answer_3.png) no-repeat center;
+}
+li#li4 a {
+	background: url(img/answer_4.png) no-repeat center;
+}
+dl#level {
+	position:absolute;
+	list-style-type: none;
+	background-color: #303f72;
+	text-align: center;
+	color: #fff;
+	width: 120px;
+	top: 1.5%;
+	right: 2%;
+	margin: 0;
+	padding: 0;
+}
+dl#level dt {
+	cursor: pointer;
+	border: 1px solid #aaa;
+	border-collapse: collapse;
+	margin: 0;
+	padding: 10px;
+}
+dl#level dd {
+	border: 1px solid #aaa;
+	border-collapse: collapse;
+	width: 100%;
+	margin: 0;
+}
+dl#level a {
+	display: block;
+	background-color: #eee;
+	color: #000;
+	text-decoration: none;
+	padding: 10px;
+}
+dl#level a.active {
+	background-color: #c0ccf9;
+}
+
+#explain{
+	width: 98%;
+	/*border: solid 1px #00f;*/
+	text-align: center;
+	margin: 10px auto;
+}
+
+#explain_next a{
+	color: #000;
+	font-size: 3em;
+
+	text-align: center;
+	margin: 10px auto;
+
+	/*border: solid 1px #f00;*/
+}
+
+#explain_photo{
+	text-align: center;
+	margin: 10px auto;
+	/*width: 100%;*/
+	width: 720px;
+}
+#explain_photo img{
+	width: 100%;
+}
+#explain_txt{
+	text-align: left;
+	margin: 10px auto 20px;
+	width: 80%;
+	font-size: 3em;
+}
+
+
+/* TOPページのスタイル */
+#headline_contents ul{
+	width:100%;
+	margin:0 auto;
+	padding:0;
+	display:-webkit-box;
+	display:-moz-box;
+	display:-ms-box;
+	display:-webkit-flexbox;
+	display:-moz-flexbox;
+	display:-ms-flexbox;
+	display:-webkit-flex;
+	display:-moz-flex;
+	display:-ms-flex;
+	display:flex;
+	-webkit-box-lines:multiple;
+	-moz-box-lines:multiple;
+	-webkit-flex-wrap:wrap;
+	-moz-flex-wrap:wrap;
+	-ms-flex-wrap:wrap;
+	flex-wrap:wrap;
+}
+
+#headline_contents .mochi_list{
+	background: #FFF;
+	padding: 8px;
+	overflow: hidden;
+	width: 44%;
+	margin: 10px auto;
+	border: solid 1px #BBB;
+	display:inline-block;
+}
+
+#headline_contents #mochi_type_photo{
+	margin: 4px;
+	float: left;
+}
+#headline_contents #mochi_type_photo img{
+		width: 100%;
+}
+#headline_contents #mochi_type_name{
+	font-size: 1.4em;
+	text-align: center;
+}
+#headline_contents #mochi_type_name a{
+	color: #333;
+	text-decoration: none;
+}
+#headline_contents h1{
+	font-size: 3em;
+	margin: 16px auto;
+	text-align: center;
+}
+#headline_contents .f_blue{
+	color: #1E90FF;
+	font-size: 1.4em;
+	margin: 6px auto;
+	text-align: center;
+}
+.wf-nicomoji { font-family: "Nico Moji"; }
+.wf-mplus1p { font-family: "M PLUS 1p"; }
+.wf-nikukyu { font-family: "Nikukyu"; }
+
+/*??*/
+.title{
+	color: #333;
+	font-size: 1.5em;
+	margin: 0;
+}
+.title a{color:#f00;}
+
+
+/*socket*/
+
+html {
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+body {
+	margin: 0;
+	color: #4B4B4B;
+	font-family:arial,"ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","メイリオ","Meiryo",Osaka,"ＭＳ Ｐゴシック","MS PGothic",Sans-Serif;
+  	font-family: source-sans-pro;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 1em;
+	background-color: #FFF;/*ここで枠の外の背景色*/
+	/*background-color: #FF0000;*/
+}
+#wrapper {
+	width: 100%;
+	margin: 0 auto;
+	//max-width: 1000px;
+	background-color: white;/*ここで枠の背景色*/
+  padding: 0 4%;
+}
+h1, h2 {
+	color: #1E1E1E;
+	font-style: bold;
+	font-weight: 400;
+  font-size: 1.6em;
+  padding: 4px;
+  margin: 0;
+	text-align: center;
+}
+.h1_center{text-align: center;}
+h3{
+  padding: 10px 0 5px;
+  margin: 0;
+	color: #09F;
+}
+a {
+	font-weight: bold;
+	text-decoration: none;
+}
+a:link {
+	color: #F68979;
+}
+a:visited {
+	color: #FF944C;
+}
+a:hover, a:active, a:focus {
+	color: #7F3300;
+	text-decoration: underline;
+}
+
+.img_l{
+  float: left;
+  //border: solid 1px #00f;
+  width: 48%;
+}
+.text_l{
+  //border: solid 1px #0ff;
+  float: left;
+  width: 48%;
+  font-size: 200%;
+  margin-left: 10px;
+}
+
+//問題の枠
+#mochi_display{
+  clear: both;
+ // border: solid 1px #f00;
+  width: 100%;
+  font-size: 1em;
+}
+//答えの枠
+#mochi_ans{
+  //border: solid 1px #0ff;
+}
+#m_name{/*もちの名前*/
+  font-size: 2em;
+  //border: solid 1px #f00;
+}
+#m_quiz{/*クイズ文章*/
+  font-size: 1.8em;
+  //border: solid 1px #00f;
+}
+#m_ans{/*答え*/
+  font-size: 3em;
+  //border: solid 1px #f0f;
+}
+#m_info{/*詳細*/
+  font-size: 2em;
+  //border: solid 1px #f00;
+
+  float: left;
+  width: 48%;
+  margin: 0 0 0 2%;
+}
+
+#m_img{
+  //border: solid 1px #00f;
+
+  float: left;
+  width: 48%;
+}
+#m_img img{
+  width: 100%;
+}
+ul#sw_st{
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  width: 100%;
+  //border: solid 1px #800;
+  text-align: left;
+  padding: 0px;
+  margin: 0px;
+  font-size: 1em;
+  text-align: center;
+  line-height: 0.8;
+
+}
+ul#sw_st>li{
+  border: solid 1px #999;
+  list-style: none;
+  box-sizing: border-box;
+  padding: 10px;
+  width:100%;
+}
+
+/*socket-end*/
+
+
+.media_02 {
+    background: #FFF;
+    padding: 10px;
+    overflow: hidden;
+    width:42%;
+    float: left;
+    margin-top: 10px;
+    margin-right: 10px;
+    border:solid 1px #333;
+
+}
+/*追記　画像、テキスト横並び部分のCSSここまで　*/
+.media_image {
+    float: left;
+    margin-right: 10px;
+}
+.media_summary {
+    overflow: hidden;
+}
+.media_heading {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.mizu{
+	background: #9FF;
+}
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+	#wrapper{
+		background: #fff;
+	}
+	#content {
+		padding: 48px 0 100px;
+	}
+	#question{
+		width:98%;
+		/*border: solid 1px #00f;*/
+	}
+
+	#answer{
+		width:98%;
+		/*border: solid 1px #00f;*/
+	}
+	#m_ans{/*答え*/
+	  font-size: 1.5em;
+	  //border: solid 1px #f0f;
+	}
+	#m_info{/*詳細*/
+	  font-size: 1.4em;
+	  //border: solid 1px #f00;
+	  float: left;
+	  width:98%;
+	  margin: 0 0 0 2%;
+	}
+	#m_img{
+	  //border: solid 1px #00f;
+	  float: left;
+	  width: 98%;
+	}
+	#m_img img{
+	  width: 100%;
+	}
+	#flag {
+		width: 100%;
+	}
+	ul#answer {
+		width: 100%;
+		margin: 48px auto 0;
+		font-size: 40px;
+	}
+	ul#answer li {
+		max-width: 960px;
+		margin: 0px auto 0;
+	}
+	ul#answer li a {
+		padding: 40px 0;
+	}
+	dl#level {
+		width: 200px;
+		font-size: 36px;
+	}
+	dl#level dt {
+		margin: 0;
+		padding: 20px;
+	}
+	dl#level dd {
+		margin: 0;
+		padding: 0;
+	}
+	dl#level a {
+		margin: 0;
+		padding: 20px;
+	}
+}
